@@ -81,7 +81,7 @@ public class CustomerController {
 	}
 	
 	/*
-	 * Customer receives an overview of their bank account. This includes their iban, account type, balance and currrency.
+	 * Customer receives an overview of their bank account. This includes their iban, account type, balance and currency.
 	 */
 	@GetMapping("overview")
 	public OverviewResponseDto getCustomerOverview(HttpServletRequest request) {

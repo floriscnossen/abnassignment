@@ -32,8 +32,7 @@ public class Customer {
 	@Column(nullable = false)
 	private LocalDate birthdate;
 	
-	//TODO
-	@Column(nullable = true, length = 100)
+	@Column(nullable = true)
 	private String idDocument;
 	
 	@Column(nullable = false, length = 100, unique = true)

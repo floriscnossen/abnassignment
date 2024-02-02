@@ -1,7 +1,5 @@
 package nl.workingtalent.abnassignment.dto;
 
-import java.time.LocalDate;
-
 public class CountryRequestDto {
 	private String countryCode;
 	private String name;
