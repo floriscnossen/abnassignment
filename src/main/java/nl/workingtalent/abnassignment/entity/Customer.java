@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -24,7 +25,8 @@ public class Customer {
 	
 	@Column(nullable = true, length = 100)
 	private String adress;
-	
+
+	@Column(nullable = false)
 	private LocalDate birthdate;
 	
 	//TODO
@@ -40,20 +42,22 @@ public class Customer {
 	@OneToMany(mappedBy = "customer")
 	private List<Login> logins;
 	
-	@OneToOne(mappedBy = "customer")
+	@OneToOne
+	@JoinColumn
 	private Account account;
 	
 	// Constructors
-	public Customer() {}
+	public Customer() { super(); }
 
-	public Customer(String name, String adress, LocalDate birthdate, String idDocument, String username) {
+	public Customer(String name, String adress, LocalDate birthdate, String idDocument, String username, Account account) {
 		super();
 		this.name = name;
 		this.adress = adress;
 		this.birthdate = birthdate;
 		this.idDocument = idDocument;
 		this.username = username;
-		this.password = RandomStringUtils.randomAlphanumeric(10);
+		this.password = RandomStringUtils.randomAlphanumeric(14);
+		this.account = account;
 	}
 	
 	//Getters and setters
@@ -72,5 +76,61 @@ public class Customer {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAdress() {
+		return adress;
+	}
+
+	public void setAdress(String adress) {
+		this.adress = adress;
+	}
+
+	public LocalDate getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(LocalDate birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	public String getIdDocument() {
+		return idDocument;
+	}
+
+	public void setIdDocument(String idDocument) {
+		this.idDocument = idDocument;
+	}
+
+	public List<Login> getLogins() {
+		return logins;
+	}
+
+	public void setLogins(List<Login> logins) {
+		this.logins = logins;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 }

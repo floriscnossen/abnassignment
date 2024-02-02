@@ -1,6 +1,11 @@
 package nl.workingtalent.abnassignment.controller;
 
+import java.time.LocalDate;
+import java.time.Period;
+
+import org.apache.commons.math3.random.RandomDataGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +19,7 @@ import nl.workingtalent.abnassignment.dto.LogonResponseDto;
 import nl.workingtalent.abnassignment.dto.OverviewResponseDto;
 import nl.workingtalent.abnassignment.dto.RegisterRequestDto;
 import nl.workingtalent.abnassignment.dto.RegisterResponseDto;
+import nl.workingtalent.abnassignment.entity.Account;
 import nl.workingtalent.abnassignment.entity.Customer;
 import nl.workingtalent.abnassignment.entity.Login;
 import nl.workingtalent.abnassignment.service.CustomerService;
@@ -26,9 +32,18 @@ public class CustomerController {
 	
 	@PostMapping("register")
 	public RegisterResponseDto register(@RequestBody RegisterRequestDto registerRequestDto) {
-		System.out.println("Test");
-		Customer customer = customerService.addCustomer(toEntity(registerRequestDto));
-		return new RegisterResponseDto(customer.getUsername(), customer.getPassword());
+		Customer customer = toEntity(registerRequestDto);
+		
+		if (Period.between(customer.getBirthdate(), LocalDate.now()).getYears() < 18) {
+			return new RegisterResponseDto("You must be at least 18 years old to register");
+		}
+		try {
+			customer = customerService.addCustomer(toEntity(registerRequestDto));
+			return new RegisterResponseDto(customer.getUsername(), customer.getPassword());
+		}
+		catch (DataIntegrityViolationException e) {
+			return new RegisterResponseDto("Username '" + customer.getUsername() + "' already exists");
+		}
 	}
 	
 	@PostMapping("token")
@@ -57,12 +72,16 @@ public class CustomerController {
 		if (login == null) {
 			return new OverviewResponseDto("Not logged in");
 		}
-		return new OverviewResponseDto("NL32 XYZB 1234 5678 90", "CHECKING", 0, "Euro");
+		Account account = login.getCustomer().getAccount();
+		return new OverviewResponseDto(account.getIban(), account.getAccountType(), account.getBalance(), 
+				account.getCurrency());
 	}
 	
 	private Customer toEntity(RegisterRequestDto registerDto) {
+		long accountNumber = new RandomDataGenerator().nextLong(0, 9999999999L);
+		Account account = new Account(accountNumber, "CHECKING", 0, "Euro");
 		Customer customer = new Customer(registerDto.getName(), registerDto.getAdress(), registerDto.getBirthdate(), 
-				registerDto.getIdDocument(), registerDto.getUsername());
+				registerDto.getIdDocument(), registerDto.getUsername(), account);
 		return customer;
 	}
 }

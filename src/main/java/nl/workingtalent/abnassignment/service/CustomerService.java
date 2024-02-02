@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import nl.workingtalent.abnassignment.entity.Customer;
 import nl.workingtalent.abnassignment.entity.Login;
+import nl.workingtalent.abnassignment.repository.AccountRepository;
 import nl.workingtalent.abnassignment.repository.CustomerRepository;
 import nl.workingtalent.abnassignment.repository.LoginRepository;
 
@@ -16,9 +17,13 @@ public class CustomerService {
 	CustomerRepository customerRepository;
 	
 	@Autowired
+	AccountRepository accountRepository;
+	
+	@Autowired
 	LoginRepository loginRepository;
 	
 	public Customer addCustomer(Customer customer) {
+		accountRepository.save(customer.getAccount());
 		return customerRepository.save(customer);
 	}
 	
