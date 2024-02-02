@@ -60,7 +60,7 @@ public class Customer {
 		this.account = account;
 	}
 	
-	//Getters and setters
+	// Getters and setters
 
 	public String getUsername() {
 		return username;

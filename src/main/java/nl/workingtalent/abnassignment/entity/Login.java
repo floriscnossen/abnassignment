@@ -24,9 +24,7 @@ public class Login {
 	private Customer customer;
 	
 	// Constructors
-	public Login() {
-		super();
-	}
+	public Login() { super(); }
 
 	public Login(Customer customer) {
 		super();
@@ -34,8 +32,7 @@ public class Login {
 		this.token = RandomStringUtils.randomAlphanumeric(100);
 	}
 	
-	//Getters and setters
-	
+	// Getters and setters
 	public Customer getCustomer() {
 		return customer;
 	}

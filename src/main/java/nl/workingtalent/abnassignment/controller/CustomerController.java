@@ -20,6 +20,7 @@ import nl.workingtalent.abnassignment.dto.OverviewResponseDto;
 import nl.workingtalent.abnassignment.dto.RegisterRequestDto;
 import nl.workingtalent.abnassignment.dto.RegisterResponseDto;
 import nl.workingtalent.abnassignment.entity.Account;
+import nl.workingtalent.abnassignment.entity.AccountType;
 import nl.workingtalent.abnassignment.entity.Customer;
 import nl.workingtalent.abnassignment.entity.Login;
 import nl.workingtalent.abnassignment.service.CustomerService;
@@ -73,13 +74,13 @@ public class CustomerController {
 			return new OverviewResponseDto("Not logged in");
 		}
 		Account account = login.getCustomer().getAccount();
-		return new OverviewResponseDto(account.getIban(), account.getAccountType(), account.getBalance(), 
+		return new OverviewResponseDto(account.getIban(), account.getAccountType().toString(), account.getBalance(), 
 				account.getCurrency());
 	}
 	
 	private Customer toEntity(RegisterRequestDto registerDto) {
 		long accountNumber = new RandomDataGenerator().nextLong(0, 9999999999L);
-		Account account = new Account(accountNumber, "CHECKING", 0, "Euro");
+		Account account = new Account(accountNumber, AccountType.CHECKING, 0, "Euro");
 		Customer customer = new Customer(registerDto.getName(), registerDto.getAdress(), registerDto.getBirthdate(), 
 				registerDto.getIdDocument(), registerDto.getUsername(), account);
 		return customer;

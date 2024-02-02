@@ -8,6 +8,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,8 +22,8 @@ public class Account {
 	@Id
 	private String iban;
 	
-	@Column(nullable = true, length = 100)
-	private String accountType;
+	@Enumerated(EnumType.STRING)
+	private AccountType accountType;
 
 	@Column(nullable = true, length = 100)
 	private long balance;
@@ -35,7 +37,7 @@ public class Account {
 	// Constructors
 	public Account() { super(); }
 
-	public Account(long accountNumber, String accountType, long balance, String currency) {
+	public Account(long accountNumber, AccountType accountType, long balance, String currency) {
 		super();
 		this.iban = calculateIban(accountNumber);
 		this.accountType = accountType;
@@ -43,7 +45,7 @@ public class Account {
 		this.currency = currency;
 	}
 
-	//Getters and setters
+	// Getters and setters
 	public String getIban() {
 		return iban;
 	}
@@ -52,11 +54,11 @@ public class Account {
 		this.iban = iban;
 	}
 
-	public String getAccountType() {
+	public AccountType getAccountType() {
 		return accountType;
 	}
 
-	public void setAccountType(String accountType) {
+	public void setAccountType(AccountType accountType) {
 		this.accountType = accountType;
 	}
 
