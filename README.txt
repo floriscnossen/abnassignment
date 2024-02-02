@@ -1,0 +1,1 @@
+To run the application, you will need to run a mysql server at localhost:3306 and create a database abn_assignment. The project has to be imported as a gradle groovy project. The file AbnassignmentApplication.java should be run as a java application.
