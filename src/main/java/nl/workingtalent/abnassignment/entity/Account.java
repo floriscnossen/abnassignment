@@ -88,6 +88,8 @@ public class Account {
 	
 	/*
 	 * Calculate and update the IBAN number based on an account number.
+	 * The dutch IBAN has the following format: NLcc bbbb #### #### ## where cc are the check digits, 
+	 * bbbb is the bank code and #### #### ## is the account number.
 	 */
 	public static String calculateIban(long accountNumber) {
 		String countryCode = "NL";
@@ -97,7 +99,13 @@ public class Account {
 		
 		return String.format("NL%02d %s %10d", checkDigits, bankCode, accountNumber);
 	}
-	
+	/*
+	 * Calculate the check digits in the IBAN based on a country code, a bank code and an account number.
+	 * We first put country code and two zeros at the end of the IBAN and convert all letters into numbers 
+	 * via the mapping A -> 10, B -> 11, ..., Z -> 35. Then we calculate the remainder of this number modulo 97.
+	 * We use modular arithmetic to speed up this process.
+	 * Lastly we get the check digits by subtracting this remainder from 98.
+	 */
 	public static int calculateCheckDigits(String countryCode, String bankCode, long accountNumber) {
 		String string = String.format("%s%010d%s00", bankCode, accountNumber, countryCode);
 		int remainder = 0;

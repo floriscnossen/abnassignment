@@ -5,12 +5,13 @@ import java.time.LocalDate;
 public class RegisterRequestDto {
 	private String name;
 	private String adress;
+	private String countryCode;
 	private LocalDate birthdate;
 	private String idDocument;
 	private String username;
 	private String oneTimePassword;
 
-	//Getters and setters
+	// Getters and setters
 	public String getName() {
 		return name;
 	}
@@ -22,6 +23,12 @@ public class RegisterRequestDto {
 	}
 	public void setAdress(String adress) {
 		this.adress = adress;
+	}
+	public String getCountryCode() {
+		return countryCode;
+	}
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 	public LocalDate getBirthdate() {
 		return birthdate;

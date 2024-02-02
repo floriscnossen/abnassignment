@@ -31,9 +31,16 @@ public class CustomerController {
 	@Autowired
 	CustomerService customerService;
 	
+	/*
+	 * Register a new customer in the system. The customer must be in a country from the allowed list
+	 * and must be at least 18 years old.
+	 */
 	@PostMapping("register")
 	public RegisterResponseDto register(@RequestBody RegisterRequestDto registerRequestDto) {
 		Customer customer = toEntity(registerRequestDto);
+		if (!customerService.countryAllowed(customer.getCountryCode())) {
+			return new RegisterResponseDto("You are not allowed to register in your country");
+		}
 		
 		if (Period.between(customer.getBirthdate(), LocalDate.now()).getYears() < 18) {
 			return new RegisterResponseDto("You must be at least 18 years old to register");
@@ -47,6 +54,9 @@ public class CustomerController {
 		}
 	}
 	
+	/*
+	 * Customer logs in with their username and password and receive a bearer token.
+	 */
 	@PostMapping("token")
 	public TokenResponseDto getToken(@RequestBody TokenRequestDto requestDto) {
 		String token = customerService.login(requestDto.getUsername(), requestDto.getPassword());
@@ -57,7 +67,10 @@ public class CustomerController {
 			return new TokenResponseDto(true, token);
 		}
 	}
-	
+
+	/*
+	 * Customer logs in with their bearer token and receive whether they are logged in.
+	 */
 	@GetMapping("logon")
 	public LogonResponseDto logon(HttpServletRequest request) {
 		Login login = (Login) request.getAttribute("XYZ_LOGIN");
@@ -67,6 +80,9 @@ public class CustomerController {
 		return new LogonResponseDto(true, "Logged in with username: " + login.getCustomer().getUsername());
 	}
 	
+	/*
+	 * Customer receives an overview of their bank account. This includes their iban, account type, balance and currrency.
+	 */
 	@GetMapping("overview")
 	public OverviewResponseDto getCustomerOverview(HttpServletRequest request) {
 		Login login = (Login) request.getAttribute("XYZ_LOGIN");
@@ -78,11 +94,14 @@ public class CustomerController {
 				account.getCurrency());
 	}
 	
+	/*
+	 * Creates a new customer and account entity based on the register request body.
+	 */
 	private Customer toEntity(RegisterRequestDto registerDto) {
 		long accountNumber = new RandomDataGenerator().nextLong(0, 9999999999L);
 		Account account = new Account(accountNumber, AccountType.CHECKING, 0, "Euro");
-		Customer customer = new Customer(registerDto.getName(), registerDto.getAdress(), registerDto.getBirthdate(), 
-				registerDto.getIdDocument(), registerDto.getUsername(), account);
+		Customer customer = new Customer(registerDto.getName(), registerDto.getAdress(), registerDto.getCountryCode(),
+				registerDto.getBirthdate(), registerDto.getIdDocument(), registerDto.getUsername(), account);
 		return customer;
 	}
 }

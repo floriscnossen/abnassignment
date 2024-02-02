@@ -19,7 +19,7 @@ public class RegisterResponseDto {
 		this.message = message;
 	}
 	
-	//Getters and setters
+	// Getters and setters
 	public boolean isSuccess() {
 		return success;
 	}

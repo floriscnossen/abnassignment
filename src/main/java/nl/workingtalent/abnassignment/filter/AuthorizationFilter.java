@@ -20,6 +20,9 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 	@Autowired
 	private LoginRepository loginRepository;
 
+	/*
+	 * Retrieve the bearer token from the request header (if present) and add the current login to the request.
+	 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {

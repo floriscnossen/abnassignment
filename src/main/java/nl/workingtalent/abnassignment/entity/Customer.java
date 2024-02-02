@@ -25,6 +25,9 @@ public class Customer {
 	
 	@Column(nullable = true, length = 100)
 	private String adress;
+	
+	@Column(length = 3)
+	private String countryCode;
 
 	@Column(nullable = false)
 	private LocalDate birthdate;
@@ -49,10 +52,12 @@ public class Customer {
 	// Constructors
 	public Customer() { super(); }
 
-	public Customer(String name, String adress, LocalDate birthdate, String idDocument, String username, Account account) {
+	public Customer(String name, String adress, String countryCode, LocalDate birthdate, String idDocument, 
+			String username, Account account) {
 		super();
 		this.name = name;
 		this.adress = adress;
+		this.countryCode = countryCode;
 		this.birthdate = birthdate;
 		this.idDocument = idDocument;
 		this.username = username;
@@ -100,6 +105,14 @@ public class Customer {
 
 	public void setAdress(String adress) {
 		this.adress = adress;
+	}
+
+	public String getCountryCode() {
+		return countryCode;
+	}
+
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
 	}
 
 	public LocalDate getBirthdate() {
